@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using RBS.Api.Attributes;
+using RBS.Api.Middlewares;
 using RBS.Db.Context;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,10 +46,21 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
+builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(configuration["Elasticsearch:Uri"] ?? "http://localhost:9200"))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = "dotnet-logs-{0:yyyy.MM.dd}"
+    }));
+
+
 builder.Services.AddDbContext<RbsContext>(opt =>
     opt.UseSqlServer(configuration.GetConnectionString("DefaultConfiguration"), 
         x => x.UseNetTopologySuite()));
 
+builder.Services.AddScoped<ModelValidationAttribute>();
 
 builder.Services.AddAuthorization();
 
@@ -57,9 +72,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapIdentityApi<IdentityUser>();
 
