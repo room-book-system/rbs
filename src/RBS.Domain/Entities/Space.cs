@@ -1,4 +1,4 @@
-﻿namespace RBS.Db.Entities;
+﻿namespace RBS.Domain.Entities;
 
 public class Space
 {
@@ -6,5 +6,5 @@ public class Space
 
     public Guid Guid { get; set; }
 
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
 }

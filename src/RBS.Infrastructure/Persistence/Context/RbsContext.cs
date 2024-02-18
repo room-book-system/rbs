@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RBS.Db.Entities;
+using RBS.Application.Common;
+using RBS.Domain.Entities;
+using Location = RBS.Domain.Entities.Location;
 
-namespace RBS.Db.Context
+namespace RBS.Infrastructure.Persistence.Context
 {
-    public class RbsContext : IdentityDbContext<IdentityUser>
+    public class RbsContext : IdentityDbContext<IdentityUser>, IRbsContext
     {
         public RbsContext(DbContextOptions<RbsContext> options) : base(options)
         {

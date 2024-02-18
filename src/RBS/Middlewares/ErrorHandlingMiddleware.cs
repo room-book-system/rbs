@@ -22,7 +22,7 @@ public class ErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError("Unhandled exception ...", ex);
+            _logger.LogError("An error occurred: {Message}", ex.Message);
             await HandleExceptionAsync(httpContext, ex);
         }
     }
@@ -31,6 +31,11 @@ public class ErrorHandlingMiddleware
     {
         const HttpStatusCode code = HttpStatusCode.InternalServerError;
 
+        switch (exception)
+        {
+            // Add cases with custom exceptions here
+        }
+        
         var result = JsonSerializer.Serialize(new { error = exception.Message });
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;

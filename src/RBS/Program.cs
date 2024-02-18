@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RBS.Api.Attributes;
 using RBS.Api.Middlewares;
-using RBS.Db.Context;
+using RBS.Infrastructure.Persistence.Context;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
@@ -52,9 +52,12 @@ builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
     .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(configuration["Elasticsearch:Uri"] ?? "http://localhost:9200"))
     {
         AutoRegisterTemplate = true,
-        IndexFormat = "dotnet-logs-{0:yyyy.MM.dd}"
-    }));
-
+        IndexFormat = $"{configuration["ApplicationName"]}-logs-{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+        NumberOfShards = 2,
+        NumberOfReplicas = 1
+    })
+    .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
+    .ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddDbContext<RbsContext>(opt =>
     opt.UseSqlServer(configuration.GetConnectionString("DefaultConfiguration"), 

@@ -16,12 +16,16 @@ public class SpaceController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetSpaceById(int id)
     {
+        await Task.FromResult(1);
+
         return Ok(test[id]);
     }
 
     [HttpGet("list")]
     public async Task<IActionResult> GetAllSpaces()
     {
+        await Task.FromResult(1);
+        
         return Ok(test);
     }
 }

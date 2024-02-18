@@ -20,8 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Entities\" />
+    <Folder Include="Persistence\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RBS.Application\RBS.Application.csproj" />
+    <ProjectReference Include="..\RBS.Domain\RBS.Domain.csproj" />
   </ItemGroup>
 
 </Project>

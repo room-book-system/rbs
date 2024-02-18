@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RBS.Db.Extensions;
+namespace RBS.Infrastructure.Extensions;
 
 public static class DatabaseConfigExtension
 {

@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RBS.Db\RBS.Db.csproj" />
+    <ProjectReference Include="..\RBS.Infrastructure\RBS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

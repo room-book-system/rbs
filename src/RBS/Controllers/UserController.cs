@@ -16,12 +16,16 @@ public class UserController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> CreateAsync()
     {
+        await Task.FromResult(1);
+
         return Ok();
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateAsync()
     {
+        await Task.FromResult(1);
+
         return Ok();
     }
 }
