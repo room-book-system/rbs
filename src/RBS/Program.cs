@@ -78,6 +78,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<RbsContext>();
+
+if (dbContext.Database.GetPendingMigrations().Any()){
+    await dbContext.Database.MigrateAsync();
+}
+
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapIdentityApi<IdentityUser>();
